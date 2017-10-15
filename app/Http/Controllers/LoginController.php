@@ -8,6 +8,7 @@ use App\Payment;
 use App\Services;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
 
 
 use Illuminate\Support\Facades\Auth;
