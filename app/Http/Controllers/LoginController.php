@@ -55,29 +55,33 @@ class LoginController extends Controller
     }
 
     public function register(Request $request){
+
         $user= $request->user;
         $shop =  $request->shop;
 
-        $newUser =  new User();
+
         $newShop = new Shop();
 
-        $newShop->name = $shop->name;
+        $newShop->name = $shop['name'];
         $newShop->cash = 0;
-        $newShop->street = $shop->street;
-        $newShop->colony =  $shop->colony;
-        $newShop->postalCode = $shop->postalCode;
-        $newShop->city = $shop->city;
-        $newShop->state =  $shop->state;
+        $newShop->street = $shop['street'];
+        $newShop->colony =  $shop['colony'];
+        $newShop->postalCode = $shop['postalCode'];
+        $newShop->city = $shop['city'];
+        $newShop->state =  $shop['state'];
 //        $newShop->country = $shop->country;
         $newShop->save();
 
-        $newUser->name =  $user->name;
+//        return response()->json($newShop);
+
+        $newUser =  new User();
+        $newUser->name =  $user['name'];
         $newUser->shop_id = $newShop->id;
-        $newUser->email = $user->email;
-        $newUser->phone = $user->phone;
-        $newUser->password = bcryt($user->password);
+        $newUser->email = $user['email'];
+        $newUser->phone = $user['phone'];
+        $newUser->password = bcrypt($user['password']);
         $newUser->user_type = 3;
-        $newUser->cash =  $user->cash;
+//        $newUser->cash =  $user['cash'];
         $newUser->save();
 
         $payment =  new Payment();
@@ -130,5 +134,9 @@ class LoginController extends Controller
             $table->double('subtotal');
         });
 
+    }
+
+    public function test(){
+        return response()->json('Exito Conexion con el BackEnd');
     }
 }
