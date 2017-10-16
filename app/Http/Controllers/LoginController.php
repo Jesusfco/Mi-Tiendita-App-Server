@@ -13,7 +13,8 @@ use Illuminate\Database\Schema\Blueprint;
 
 use Illuminate\Support\Facades\Auth;
 use Tymon\JWTAuth\Exceptions\JWTException;
-use JWTAuth;
+//use JWTAuth;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 class LoginController extends Controller
 {
@@ -46,13 +47,15 @@ class LoginController extends Controller
     }
 
     public function checkAuth(){
-        if(Auth::user()){
-            return response()->json(Auth::id());
-        }
 
-        else{
-            return response()->json(Auth::id());
-        }
+//        $this->middleware('user1');$user
+
+        $user = JWTAuth::parseToken()->authenticate();
+
+        return response()->json([
+            'user' => $user,
+        ]);
+
     }
 
     public function register(Request $request){
