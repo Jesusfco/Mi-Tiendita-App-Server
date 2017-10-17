@@ -23,3 +23,5 @@ Route::post('login', 'LoginController@signin');
 Route::get('checkAuth', 'LoginController@checkAuth');
 
 Route::get('test', 'LoginController@test');
+
+Route::get('inventory/getProducts', 'ProductController@getProducts');
