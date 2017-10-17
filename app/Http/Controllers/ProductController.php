@@ -19,8 +19,8 @@ class ProductController extends Controller
         $user = JWTAuth::parseToken()->authenticate();
         $productos = DB::table('products'. $user->shop_id)->get();
 
-//        return response()->json($productos);
-        return response()->json($request->ips());
+        return response()->json($productos);
+//        return response()->json($request->ips());
     }
 
     public function store(Request $request){
@@ -34,6 +34,7 @@ class ProductController extends Controller
         $product->price = $request->price;
         $product->reorder = $request->reorder;
         $product->stock = $request->stock;
+        $product->created_at = date_create();
         $product->save();
 
         return response()->json($product);

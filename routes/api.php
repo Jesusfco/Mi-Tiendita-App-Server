@@ -25,3 +25,6 @@ Route::get('checkAuth', 'LoginController@checkAuth');
 Route::get('test', 'LoginController@test');
 
 Route::get('inventory/getProducts', 'ProductController@getProducts');
+Route::post('inventory/create', 'ProductController@store');
+Route::post('inventory/update', 'ProductController@update');
+Route::delete('inventory/delete/{id}', 'ProductController@delete');
