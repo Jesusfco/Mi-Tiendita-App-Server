@@ -22,9 +22,11 @@ class LoginController extends Controller
     public function signin(Request $request)
     {
         $this->validate($request, [
-            'email' => 'required|email',
+            'email' => 'required',
             'password' => 'required'
         ]);
+
+//        if(strpos($request->email, '@') !== false) {
 
         $credentials = $request->only('email', 'password');
 
@@ -140,7 +142,15 @@ class LoginController extends Controller
 
     }
 
-    public function test(){
-        return response()->json('Exito Conexion con el BackEnd');
+    public function uniqueEmail(Request $request){
+        $users =  User::where('email', $request->email)->get();
+        if($users == NULL) return response()->json(true);
+        else return response()->json(false);
+    }
+
+    public function uniquePhone(Request $request){
+        $users =  User::where('phone', $request->phone)->get();
+        if($users == NULL) return response()->json(true);
+        else return response()->json(false);
     }
 }

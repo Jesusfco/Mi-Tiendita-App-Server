@@ -22,7 +22,8 @@ Route::post('register', 'LoginController@register');
 Route::post('login', 'LoginController@signin');
 Route::get('checkAuth', 'LoginController@checkAuth');
 
-Route::get('test', 'LoginController@test');
+Route::post('uniqueEmail', 'LoginController@uniqueEmail');
+Route::post('uniquePhone', 'LoginController@uniquePhone');
 
 Route::get('inventory/getProducts', 'ProductController@getProducts');
 Route::post('inventory/create', 'ProductController@store');

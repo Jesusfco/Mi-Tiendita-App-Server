@@ -43,17 +43,17 @@ class ProductController extends Controller
 
     public function update(Request $request){
         $user = JWTAuth::parseToken()->authenticate();
-        $product = DB::table('products'. $user->shop_id)
+        DB::table('products'. $user->shop_id)
                             ->where('id', $request->id)
                             ->update([
                                 'name' => $request->name,
                                 'code' => $request->code,
                                 'price' => $request->price,
-                                'reorder' => $request->reoder,
-                                'product' => $request->stock
-                            ])->get();
+                                'stock' => $request->stock,
+                                'reorder' => $request->reorder,
+                            ]);
 
-        return response()->json($product[0]);
+        return response()->json('product ' .$request->id . ' edited');
     }
 
     public function delete(Request $request){
