@@ -20,7 +20,7 @@ class CreateUsersTable extends Migration
             $table->string('email')->unique()->nullable();
             $table->string('phone')->unique()->nullable();
             $table->string('password');
-            $table->integer('user_type');
+            $table->integer('user_type_id');
             $table->boolean('active')->default(1);
             $table->double('cash')->nullable();
 //            $table->rememberToken();

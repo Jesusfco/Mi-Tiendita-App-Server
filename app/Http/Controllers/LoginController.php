@@ -20,16 +20,19 @@ class LoginController extends Controller
 {
 
     public function signin(Request $request)
-    {
+    {        
         $this->validate($request, [
             'email' => 'required',
             'password' => 'required'
         ]);
 
-//        if(strpos($request->email, '@') !== false) {
 
         $credentials = $request->only('email', 'password');
+        return $this->authProcediment($credentials);
+        
+    }
 
+    public function authProcediment($credentials){
         try {
             if(!$token = JWTAuth::attempt($credentials)){
                 return response()->json([
@@ -61,11 +64,21 @@ class LoginController extends Controller
     }
 
     public function register(Request $request){
-
+        
         $user= $request->user;
         $shop =  $request->shop;
 
+        $newShop = $this->createShop($shop);            
+        $this->createSuperAdminUser($user, $newShop);
+        $this->createFirstPayment($newShop);        
+        $this->createDescriptionTable($newShop);
+        $this->createProductsTable($newShop);
+        $this->createSalesTable($newShop);
 
+        return response()->json("Shop and user creation with success");      
+    }
+
+    public function createShop($shop){
         $newShop = new Shop();
 
         $newShop->name = $shop['name'];
@@ -75,11 +88,12 @@ class LoginController extends Controller
         $newShop->postalCode = $shop['postalCode'];
         $newShop->city = $shop['city'];
         $newShop->state =  $shop['state'];
-//        $newShop->country = $shop->country;
+        #$newShop->country = $shop->country;
         $newShop->save();
+        return $newShop;
+    }
 
-//        return response()->json($newShop);
-
+    public function createSuperAdminUser($user, $newShop){
         $newUser =  new User();
         $newUser->name =  $user['name'];
         $newUser->shop_id = $newShop->id;
@@ -87,8 +101,12 @@ class LoginController extends Controller
         $newUser->phone = $user['phone'];
         $newUser->password = bcrypt($user['password']);
         $newUser->user_type = 3;
-//        $newUser->cash =  $user['cash'];
+        #$newUser->cash =  $user['cash'];
         $newUser->save();
+
+    }
+
+    public function createFirstPayment($newShop){
 
         $payment =  new Payment();
         $payment->shop_id = $newShop->id;
@@ -96,12 +114,6 @@ class LoginController extends Controller
         $payment->amount = 0;
 
         $payment->save();
-
-        $this->createDescriptionTable($newShop);
-        $this->createProductsTable($newShop);
-        $this->createSalesTable($newShop);
-
-        return response()->json(['message' => "Shop is enable and working"]);
     }
 
     public function createProductsTable($shop){
@@ -143,14 +155,14 @@ class LoginController extends Controller
     }
 
     public function uniqueEmail(Request $request){
-        $users =  User::where('email', $request->email)->get();
-        if($users == NULL) return response()->json(true);
+        $user =  User::where('email', $request->email)->first();
+        if($user == NULL) return response()->json(true);
         else return response()->json(false);
     }
 
     public function uniquePhone(Request $request){
-        $users =  User::where('phone', $request->phone)->get();
-        if($users == NULL) return response()->json(true);
+        $user =  User::where('phone', $request->phone)->first();
+        if($user == NULL) return response()->json(true);
         else return response()->json(false);
     }
 }

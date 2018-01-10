@@ -18,7 +18,7 @@ class UsersTableSeeder extends Seeder
             'email' => 'jfcr@live.com',
             'phone'=> '9611221222',
             'shop_id'=> -1,
-            'user_type' => 10,
+            'user_type_id' => 100,
             'password' => bcrypt('secret'),
         ]);
     }
