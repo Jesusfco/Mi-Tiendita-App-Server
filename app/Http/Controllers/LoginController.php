@@ -100,7 +100,7 @@ class LoginController extends Controller
         $newUser->email = $user['email'];
         $newUser->phone = $user['phone'];
         $newUser->password = bcrypt($user['password']);
-        $newUser->user_type = 3;
+        $newUser->user_type_id = 3;
         #$newUser->cash =  $user['cash'];
         $newUser->save();
 
