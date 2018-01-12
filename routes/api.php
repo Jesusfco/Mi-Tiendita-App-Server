@@ -28,4 +28,5 @@ Route::post('uniquePhone', 'LoginController@uniquePhone');
 Route::get('inventory/getProducts', 'ProductController@getProducts');
 Route::post('inventory/create', 'ProductController@store');
 Route::post('inventory/update', 'ProductController@update');
+Route::get('inventory/{id}', 'ProductController@show');
 Route::delete('inventory/delete/{id}', 'ProductController@delete');

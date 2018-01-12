@@ -123,8 +123,8 @@ class LoginController extends Controller
             $table->string('name')->unique();
             $table->string('code')->nullable()->unique();
             $table->double('price');
-            $table->string('reorder')->nullable();
-            $table->string('stock')->nullable();
+            $table->integer('reorder')->nullable(0);
+            $table->integer('stock')->nullable(0);
             $table->timestamp('created_at');
         });
 
@@ -143,7 +143,7 @@ class LoginController extends Controller
 
     public function createDescriptionTable($shop){
 
-        Schema::create('descriptions'. $shop->id, function (Blueprint $table) {
+        Schema::create('sale_description'. $shop->id, function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->integer('sale_id');
             $table->integer('product_id');

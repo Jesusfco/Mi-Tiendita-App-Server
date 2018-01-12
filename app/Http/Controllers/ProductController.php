@@ -23,6 +23,14 @@ class ProductController extends Controller
 //        return response()->json($request->ips());
     }
 
+    public function show($id){
+        $user = JWTAuth::parseToken()->authenticate();
+        $product = DB::table('products'. $user->shop_id)
+                            ->where('id', $request->id)
+                            ->get();
+        return response()->json($product[0]);
+    }
+
     public function store(Request $request){
         $user = JWTAuth::parseToken()->authenticate();
 
