@@ -7,6 +7,7 @@ use App\Shop;
 use App\Payment;
 use App\Services;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 
@@ -46,11 +47,13 @@ class LoginController extends Controller
         }
 
         $shop = Shop::find(Auth::user()->shop_id);
+        $inventory = DB::table('products'. $shop->id)->get();
 
         return response()->json([
             'token' => $token,
             'user' => Auth::user(),
-            'shop' => $shop
+            'shop' => $shop,
+            'inventory' => $inventory
         ],200);
     }
 
