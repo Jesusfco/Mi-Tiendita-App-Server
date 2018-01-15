@@ -45,9 +45,12 @@ class LoginController extends Controller
             ], 500);
         }
 
+        $shop = Shop::find(Auth::user()->shop_id);
+
         return response()->json([
             'token' => $token,
-            'user' => Auth::user()
+            'user' => Auth::user(),
+            'shop' => $shop
         ],200);
     }
 
@@ -59,6 +62,7 @@ class LoginController extends Controller
 
         return response()->json([
             'user' => $user,
+            'shop' => Shop::find(Auth::user()->shop_id)
         ]);
 
     }
