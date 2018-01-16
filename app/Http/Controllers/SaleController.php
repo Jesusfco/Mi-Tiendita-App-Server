@@ -87,4 +87,10 @@ class SaleController extends Controller
         return response()->json('sale description');
         // return response()->json('sales', $salesReturn);
     }
+
+    public function getSales(){
+        $user = JWTAuth::parseToken()->authenticate();  
+        // return response()->json(DB::table('sales'. $user->id)
+        //                             ->b)
+    }
 }
