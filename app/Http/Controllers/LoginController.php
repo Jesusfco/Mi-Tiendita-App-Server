@@ -48,12 +48,14 @@ class LoginController extends Controller
 
         $shop = Shop::find(Auth::user()->shop_id);
         $inventory = DB::table('products'. $shop->id)->get();
+        $service = $this->getLimitService($shop->id);
 
         return response()->json([
             'token' => $token,
             'user' => Auth::user(),
             'shop' => $shop,
-            'inventory' => $inventory
+            'inventory' => $inventory,
+            'service' => $service
         ],200);
     }
 
@@ -63,9 +65,12 @@ class LoginController extends Controller
 
         $user = JWTAuth::parseToken()->authenticate();
 
+        $service = $this->getLimitService($user->shop_id);
+
         return response()->json([
             'user' => $user,
-            'shop' => Shop::find(Auth::user()->shop_id)
+            'shop' => Shop::find(Auth::user()->shop_id),
+            'service' => $service
         ]);
 
     }
@@ -171,5 +176,12 @@ class LoginController extends Controller
         $user =  User::where('phone', $request->phone)->first();
         if($user == NULL) return response()->json(true);
         else return response()->json(false);
+    }
+
+    public function getLimitService($shop_id){        
+        
+        // return Payment::where('shop_id', $shop_id)->orderBy('id', 'DESC')->first();
+        $payment = Payment::where('shop_id', $shop_id)->orderBy('id', 'DESC')->first();
+        return Services::find($payment->service_id);
     }
 }

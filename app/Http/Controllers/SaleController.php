@@ -97,7 +97,7 @@ class SaleController extends Controller
         // return response()->json(DB::table('sales'. $user->shop_id)->where('created_at', '<', "2018-01-19")->where('created_at', '>', "2018-01-15")->get());
         return response()->json(DB::table('sales'. $user->shop_id)
                                 ->where('created_at', 'LIKE', $date . "%")
-                                ->orderBy('created_at', 'desc')
+                                ->orderBy('created_at', 'DESC')
                                 ->get());
     }
 

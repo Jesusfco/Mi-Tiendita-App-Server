@@ -39,4 +39,6 @@ Route::get('sales/{id}', 'SaleController@showSale');
 
 Route::get('myUsers', 'UsersController@getUsers');
 Route::post('myUsers', 'UsersController@create');
-Route::post('myUsers/{id}', 'UserController@edit');
+Route::post('myUsers/{id}', 'UsersController@edit');
+
+Route::post('cash/globalCash', 'UsersController@updateGlobalCash');

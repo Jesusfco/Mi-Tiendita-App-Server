@@ -20,7 +20,10 @@ class CreateServicesTable extends Migration
             $table->double('promotion')->nullable();
             $table->text('description')->nullable();
             $table->integer('months');
-            $table->timestamps();
+            $table->integer('products_limit');
+            $table->integer('users_limit');
+            $table->integer('sales_months_limit');
+            $table->timestamp();
         });
     }
 
