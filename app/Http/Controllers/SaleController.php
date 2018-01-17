@@ -90,7 +90,43 @@ class SaleController extends Controller
 
     public function getSales(){
         $user = JWTAuth::parseToken()->authenticate();  
-        // return response()->json(DB::table('sales'. $user->id)
-        //                             ->b)
+        // $date = getDay();
+        $date = $this->today();
+        // $date = $date->year . "-" . $date->mon . '-' . $date->
+        // return response()->json($date);
+        // return response()->json(DB::table('sales'. $user->shop_id)->where('created_at', '<', "2018-01-19")->where('created_at', '>', "2018-01-15")->get());
+        return response()->json(DB::table('sales'. $user->shop_id)
+                                ->where('created_at', 'LIKE', $date . "%")
+                                ->orderBy('created_at', 'desc')
+                                ->get());
+    }
+
+    public function postSales(Request $request){
+
+    }
+    public function showSale($id){
+        $user = JWTAuth::parseToken()->authenticate();  
+        $sale = DB::table('sales'. $user->shop_id)
+                                    ->where('id', $id)
+                                    ->get();
+        $sale[0]->description = DB::table('sale_description'. $user->shop_id)
+                                    ->where('sale_id', $id)
+                                    ->get();                                 
+        return response()->json($sale[0]);
+    }
+
+    public function today(){
+        $date = getdate()['year'] . '-';
+
+        if(getdate()['mon'] < 10) 
+            $date .= '0' . getdate()['mon'] . '-';
+        else { $date .= getdate()['mon'] . '-'; } 
+
+        if(getdate()['mday'] < 10 )
+            $date .= '0' . getdate()['mday'];
+        else { $date .= getdate()['mday']; }
+
+        return $date;
+
     }
 }

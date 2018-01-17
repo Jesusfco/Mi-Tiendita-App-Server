@@ -33,3 +33,10 @@ Route::delete('inventory/delete/{id}', 'ProductController@delete');
 
 Route::post('sale', 'SaleController@storeSale');
 Route::post('sale/outService', 'SaleController@storeSaleOutService');
+Route::get('sales', 'SaleController@getSales');
+Route::post('sales', 'SaleController@postSales');
+Route::get('sales/{id}', 'SaleController@showSale');
+
+Route::get('myUsers', 'UsersController@getUsers');
+Route::post('myUsers', 'UsersController@create');
+Route::post('myUsers/{id}', 'UserController@edit');
