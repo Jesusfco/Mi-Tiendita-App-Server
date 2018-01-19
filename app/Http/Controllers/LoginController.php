@@ -158,7 +158,8 @@ class LoginController extends Controller
         Schema::create('sale_description'. $shop->id, function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->integer('sale_id');
-            $table->integer('product_id');
+            $table->integer('product_id')->nullable();
+            $table->string('product_name')->nullable();
             $table->double('price');
             $table->integer('quantity');
             $table->double('subtotal');

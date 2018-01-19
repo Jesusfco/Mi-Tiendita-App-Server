@@ -64,8 +64,14 @@ class ProductController extends Controller
         return response()->json('product ' .$request->id . ' edited');
     }
 
-    public function delete(Request $request){
+    public function delete(Request $request, $id){
         $user = JWTAuth::parseToken()->authenticate();
+        $descriptions = DB::table('sale_description' . $user->shop_id)->where('product_id', $id)->get();
+        foreach($descriptions as $x){
+            $x->product_id = NULL;
+            $x->product_name =  $request->name;
+            $x->save();
+        }
         $product = DB::table('products'. $user->shop_id)
             ->where('id', $request->id)
             ->delete();
