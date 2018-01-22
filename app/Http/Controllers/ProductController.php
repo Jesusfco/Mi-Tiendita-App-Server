@@ -40,8 +40,10 @@ class ProductController extends Controller
         $product->name = $request->name;
         $product->code = $request->code;
         $product->price = $request->price;
+        $product->cost_price = $request->cost_price;
         $product->reorder = $request->reorder;
         $product->stock = $request->stock;
+        $product->department =  $request->department;
         $product->created_at = date_create();
         $product->save();
 
@@ -57,8 +59,10 @@ class ProductController extends Controller
                                 'name' => $request->name,
                                 'code' => $request->code,
                                 'price' => $request->price,
+                                'cost_price' => $request->cost_price,
                                 'stock' => $request->stock,
                                 'reorder' => $request->reorder,
+                                'department' => $request->department,
                             ]);
 
         return response()->json('product ' .$request->id . ' edited');

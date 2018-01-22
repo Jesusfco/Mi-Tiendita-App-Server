@@ -11,7 +11,7 @@ class Product extends Model
 
 
     protected $fillable = [
-        'name', 'code', 'price', 'reorder', 'stock', 'created_at'
+        'name', 'code', 'price', 'cost_price', 'reorder', 'stock', 'department', 'created_at'
     ];
 
     public $timestamps = false;

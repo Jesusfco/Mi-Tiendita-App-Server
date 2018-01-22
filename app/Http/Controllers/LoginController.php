@@ -135,8 +135,10 @@ class LoginController extends Controller
             $table->string('name')->unique();
             $table->string('code')->nullable()->unique();
             $table->double('price');
+            $table->double('cost_price')->nullable();
             $table->integer('reorder')->nullable(0);
             $table->integer('stock')->nullable(0);
+            $table->string('department')->nullable(0);
             $table->timestamp('created_at');
         });
 
