@@ -7,6 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 class Shop extends Model
 {
     protected $fillable = [
-        'name', 'cash', 'active', 'street', 'colony', 'postalCode', 'city', 'state', 'createBy', 'country'
+        'name', 'cash', 'active', 'street', 'number','colony', 'postalCode', 'city', 'state', 'createBy', 'country'
     ];
 }

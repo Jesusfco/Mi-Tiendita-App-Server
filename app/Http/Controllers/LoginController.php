@@ -47,7 +47,7 @@ class LoginController extends Controller
         }
 
         $shop = Shop::find(Auth::user()->shop_id);
-        $inventory = DB::table('products'. $shop->id)->get();
+        $inventory = DB::table('products'. $shop->id)->orderBy('name', 'ASC')->get();
         $service = $this->getLimitService($shop->id);
 
         return response()->json([
@@ -96,6 +96,7 @@ class LoginController extends Controller
         $newShop->name = $shop['name'];
         $newShop->cash = 0;
         $newShop->street = $shop['street'];
+        $newShop->number = $shop['number'];
         $newShop->colony =  $shop['colony'];
         $newShop->postalCode = $shop['postalCode'];
         $newShop->city = $shop['city'];

@@ -42,3 +42,5 @@ Route::post('myUsers', 'UsersController@create');
 Route::post('myUsers/{id}', 'UsersController@edit');
 
 Route::post('cash/globalCash', 'UsersController@updateGlobalCash');
+
+Route::get('perfil', 'PerfilController@getPerfil');

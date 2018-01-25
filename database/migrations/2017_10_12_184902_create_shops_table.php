@@ -19,6 +19,7 @@ class CreateShopsTable extends Migration
             $table->double('cash')->nullable(0);
             $table->boolean('active')->default(1);
             $table->string('street')->nullable();
+            $table->integer('number')->nullable();
             $table->string('colony')->nullable();
             $table->string('postalCode')->nullable();
             $table->string('city')->nullable();

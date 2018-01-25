@@ -17,7 +17,7 @@ class ProductController extends Controller
     public function getProducts(Request $request){
 
         $user = JWTAuth::parseToken()->authenticate();
-        $productos = DB::table('products'. $user->shop_id)->get();
+        $productos = DB::table('products'. $user->shop_id)->orderBy('name', 'ASC')->get();
 
         return response()->json($productos);
 //        return response()->json($request->ips());
