@@ -92,17 +92,43 @@ class SaleController extends Controller
         $user = JWTAuth::parseToken()->authenticate();  
         // $date = getDay();
         $date = $this->today();
-        // $date = $date->year . "-" . $date->mon . '-' . $date->
-        // return response()->json($date);
-        // return response()->json(DB::table('sales'. $user->shop_id)->where('created_at', '<', "2018-01-19")->where('created_at', '>', "2018-01-15")->get());
-        return response()->json(DB::table('sales'. $user->shop_id)
-                                ->where('created_at', 'LIKE', $date . "%")
-                                ->orderBy('created_at', 'DESC')
-                                ->get());
+        
+        $sales = DB::table('sales'. $user->shop_id)
+                        ->where('created_at', 'LIKE', $date . "%")
+                        ->orderBy('created_at', 'DESC')
+                        ->get();
+        for($x = 0; $x < count($sales); $x++){
+            $sales[$x]->description = DB::table('sale_description' . $user->shop_id)->where('sale_id', $sales[$x]->id)->get();
+        }
+
+        return response()->json($sales);
     }
 
     public function postSales(Request $request){
+        
+        $user = JWTAuth::parseToken()->authenticate(); 
+        
+        if(isset($request->to))
+        $sales = DB::table('sales'. $user->shop_id)
+                        ->whereBetween('created_at', [$request->from, $request->to])
+                        ->orderBy('created_at', 'DESC')
+                        ->get();
+        else {
+            $sales = DB::table('sales'. $user->shop_id)
+                        ->where('created_at', 'LIKE', $request->from . "%")
+                        ->orderBy('created_at', 'DESC')
+                        ->get();
+        }                        
+        
+        for($x = 0; $x < count($sales); $x++){
 
+            $sales[$x]->description = DB::table('sale_description' . $user->shop_id)
+                                        ->where('sale_id', $sales[$x]->id)
+                                        ->get();
+
+        }
+
+        return response()->json($sales);
     }
     public function showSale($id){
         $user = JWTAuth::parseToken()->authenticate();  
