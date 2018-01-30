@@ -25,9 +25,9 @@ class PerfilController extends Controller
                         ->where('created_at', 'LIKE', $this->today() . "%")
                         ->orderBy('created_at', 'DESC')
                         ->get();
-        for($x = 0; $x < count($sales); $x++){
-            $sales[$x]->description = DB::table('sale_description' . $shop->id)->where('sale_id', $sales[$x]->id)->get();
-        }
+        if(isset($sales[0]))            
+            $sales = $this->pushDescription($sales, $user);
+
         return response()->json([
             'user' => $user,
             'payment' => $payment,
@@ -51,5 +51,26 @@ class PerfilController extends Controller
 
         return $date;
 
+    }
+
+    public function pushDescription($sales, $user){
+        $z = count($sales);
+        // $y = key($sales);
+        $description = DB::table('sale_description' . $user->shop_id)
+                                    ->whereBetween('sale_id', [$sales[$z-1]->id, $sales[0]->id])                                    
+                                    ->get();
+        
+        for($x = 0; $x < count($sales); $x++){
+            $sales[$x]->description = [];
+            foreach($description as $desc){
+
+                if( $sales[$x]->id == $desc->sale_id){
+                    $sales[$x]->description[] = $desc;
+                }
+
+            }
+        }
+
+        return $sales;
     }
 }

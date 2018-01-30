@@ -99,6 +99,9 @@ class SaleController extends Controller
                         ->orderBy('created_at', 'DESC')
                         ->get();
 
+        if(!isset($sales[0]))
+            return response()->json($sales);                        
+        
         $sales = $this->pushDescription($sales, $user);
 
         return response()->json($sales);
