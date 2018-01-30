@@ -89,6 +89,7 @@ class SaleController extends Controller
     }
 
     public function getSales(){
+
         $user = JWTAuth::parseToken()->authenticate();  
         // $date = getDay();
         $date = $this->today();
@@ -97,9 +98,8 @@ class SaleController extends Controller
                         ->where('created_at', 'LIKE', $date . "%")
                         ->orderBy('created_at', 'DESC')
                         ->get();
-        for($x = 0; $x < count($sales); $x++){
-            $sales[$x]->description = DB::table('sale_description' . $user->shop_id)->where('sale_id', $sales[$x]->id)->get();
-        }
+
+        $sales = $this->pushDescription($sales, $user);
 
         return response()->json($sales);
     }
@@ -110,7 +110,7 @@ class SaleController extends Controller
         
         if(isset($request->to))
         $sales = DB::table('sales'. $user->shop_id)
-                        ->whereBetween('created_at', [$request->from, $request->to])
+                        ->whereBetween('created_at', [$request->from, $request->to . " 23:59:59"])
                         ->orderBy('created_at', 'DESC')
                         ->get();
         else {
@@ -118,18 +118,37 @@ class SaleController extends Controller
                         ->where('created_at', 'LIKE', $request->from . "%")
                         ->orderBy('created_at', 'DESC')
                         ->get();
-        }                        
+        } 
+
+        if(!isset($sales[0]))
+            return response()->json($sales);
+
+        $sales = $this->pushDescription($sales, $user);
         
-        for($x = 0; $x < count($sales); $x++){
-
-            $sales[$x]->description = DB::table('sale_description' . $user->shop_id)
-                                        ->where('sale_id', $sales[$x]->id)
-                                        ->get();
-
-        }
-
         return response()->json($sales);
     }
+
+    public function pushDescription($sales, $user){
+        $z = count($sales);
+        // $y = key($sales);
+        $description = DB::table('sale_description' . $user->shop_id)
+                                    ->whereBetween('sale_id', [$sales[$z-1]->id, $sales[0]->id])                                    
+                                    ->get();
+        
+        for($x = 0; $x < count($sales); $x++){
+            $sales[$x]->description = [];
+            foreach($description as $desc){
+
+                if( $sales[$x]->id == $desc->sale_id){
+                    $sales[$x]->description[] = $desc;
+                }
+
+            }
+        }
+
+        return $sales;
+    }
+
     public function showSale($id){
         $user = JWTAuth::parseToken()->authenticate();  
         $sale = DB::table('sales'. $user->shop_id)
