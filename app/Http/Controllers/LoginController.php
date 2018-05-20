@@ -48,6 +48,11 @@ class LoginController extends Controller
 
         $shop = Shop::find(Auth::user()->shop_id);
         $inventory = DB::table('products'. $shop->id)->orderBy('name', 'ASC')->get();
+
+        foreach($inventory as $i) {
+            // DB::table('products'. $shop->id)->where('id', $i->id)->update(['updated_at' => $i->created_at]);
+        }
+
         $service = $this->getLimitService($shop->id);
 
         return response()->json([
@@ -140,7 +145,7 @@ class LoginController extends Controller
             $table->integer('reorder')->nullable(0);
             $table->integer('stock')->nullable(0);
             $table->string('department')->nullable(0);
-            $table->timestamp('created_at');
+            $table->timestamps();
         });
 
     }

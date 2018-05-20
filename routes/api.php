@@ -30,6 +30,7 @@ Route::post('inventory/create', 'ProductController@store');
 Route::post('inventory/update', 'ProductController@update');
 Route::get('inventory/{id}', 'ProductController@show');
 Route::delete('inventory/delete/{id}', 'ProductController@delete');
+Route::post('inventory/sync', 'ProductController@syncUp');
 
 Route::post('sale', 'SaleController@storeSale');
 Route::post('sale/outService', 'SaleController@storeSaleOutService');

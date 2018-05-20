@@ -19,6 +19,7 @@ class SaleController extends Controller
         $this->updateCash($user, $sale);        
                 
         foreach($request->description as $x){
+            $x['updated_at'] = $request->created_at;
             $this->newSaleDescription($x, $user, $sale);
             $this->decrementStock($x, $user);            
         }
@@ -60,9 +61,15 @@ class SaleController extends Controller
     }
 
     public function decrementStock($x, $user){
+
         DB::table('products'. $user->shop_id)
                 ->where('id', $x['product_id'])
                 ->decrement('stock', $x['quantity']);
+
+        DB::table('products'. $user->shop_id)
+                ->where('id', $x['product_id'])                
+                ->update(['updated_at' => $x['updated_at']]);
+
     }
 
     public function storeSaleOutService(Request $request){
@@ -77,7 +84,8 @@ class SaleController extends Controller
             // array_push($salesReturn, $sale);
             
             foreach($description as $x){
-         
+                
+                $x['updated_at'] = $sale->created_at;
                 $this->newSaleDescription($x, $user, $sale);                
                 $this->decrementStock($x, $user);
 

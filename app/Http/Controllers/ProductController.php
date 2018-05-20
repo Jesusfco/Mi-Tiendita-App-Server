@@ -45,9 +45,14 @@ class ProductController extends Controller
         $product->stock = $request->stock;
         $product->department =  $request->department;
         $product->created_at = date_create();
+        $product->updated_at = date_create();
         $product->save();
 
-        return response()->json($product);
+
+        $product = DB::table('products'. $user->shop_id)
+                            ->where('id', $product->id)->get();
+                            
+        return response()->json($product[0]);
 
     }
 
@@ -63,6 +68,7 @@ class ProductController extends Controller
                                 'stock' => $request->stock,
                                 'reorder' => $request->reorder,
                                 'department' => $request->department,
+                                'updated_at' => date_create()
                             ]);
 
         return response()->json('product ' .$request->id . ' edited');
@@ -81,5 +87,15 @@ class ProductController extends Controller
             ->delete();
 
         return response()->json('deleted');
+    }
+
+    public function syncUp(Request $request) {
+
+        $user = JWTAuth::parseToken()->authenticate();
+        $inventory = DB::table('products'. $user->shop_id)
+                            ->where('updated_at', '>', $request->last_updated)->get();
+
+        return response()->json($inventory);
+
     }
 }
