@@ -74,4 +74,10 @@ class UsersController extends Controller
         $shop->save();
         return response()->json('success');
     }
+
+    public function syncCash(Request $request){
+        $user = JWTAuth::parseToken()->authenticate();
+        $shop =  Shop::find($user->shop_id);
+        return response()->json($shop->cash);
+    }
 }

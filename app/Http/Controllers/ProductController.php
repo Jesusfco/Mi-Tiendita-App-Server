@@ -51,7 +51,7 @@ class ProductController extends Controller
 
         $product = DB::table('products'. $user->shop_id)
                             ->where('id', $product->id)->get();
-                            
+
         return response()->json($product[0]);
 
     }
@@ -71,7 +71,9 @@ class ProductController extends Controller
                                 'updated_at' => date_create()
                             ]);
 
-        return response()->json('product ' .$request->id . ' edited');
+        $product = DB::table('products'. $user->shop_id)
+                            ->where('id', $request->id)->get();
+        return response()->json($product[0]);
     }
 
     public function delete(Request $request, $id){
