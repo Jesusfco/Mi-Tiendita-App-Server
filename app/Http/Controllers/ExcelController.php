@@ -11,13 +11,7 @@ use Tymon\JWTAuth\Facades\JWTAuth;
 use Excel;
 
 class ExcelController extends Controller 
-{
-    public $excel;
-
-    public function __construct(\Maatwebsite\Excel\Excel $excel)
-    {
-        $this->excel = $excel;
-    }
+{    
 
     public function getInventory(Request $request) {
         
@@ -31,6 +25,7 @@ class ExcelController extends Controller
                 $sheet->loadView('excel/inventory')->with(['products' => $products]);
 
             });
+
         })->export('xls');
 
 
