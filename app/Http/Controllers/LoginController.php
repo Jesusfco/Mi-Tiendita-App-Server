@@ -28,35 +28,50 @@ class LoginController extends Controller
         ]);
 
 
-        $credentials = $request->only('email', 'password');
-        return $this->authProcediment($credentials);
+        if(Auth::attempt(['email' => $request->email, 'password' => $request->password]) ) {
+
+            return $this->authProcediment();
+
+        } else if ( Auth::attempt(['phone' => $request->email, 'password' => $request->password]) ) {
+
+            return $this->authProcediment();
+
+        } else {
+
+            return response()->json([
+                'error' => 'Credenciales Invalidas'
+            ], 401);
+
+        }    
+
+        // return $this->authProcediment($credentials);
         
     }
 
-    public function authProcediment($credentials){
-        try {
-            if(!$token = JWTAuth::attempt($credentials)){
-                return response()->json([
-                    'error' => 'Credenciales Invalidas'
-                ], 401);
-            }
-        } catch (JWTException $e) {
-            return response()->json([
-                'error' => 'Could not create token!'
-            ], 500);
-        }
+    public function authProcediment(){
+        // try {
+        //     if(!$token = JWTAuth::attempt($credentials)){
+        //         return response()->json([
+        //             'error' => 'Credenciales Invalidas'
+        //         ], 401);
+        //     }
+        // } catch (JWTException $e) {
+        //     return response()->json([
+        //         'error' => 'Could not create token!'
+        //     ], 500);
+        // }
 
         $shop = Shop::find(Auth::user()->shop_id);
         $inventory = DB::table('products'. $shop->id)->orderBy('name', 'ASC')->get();
 
-        foreach($inventory as $i) {
-            // DB::table('products'. $shop->id)->where('id', $i->id)->update(['updated_at' => $i->created_at]);
-        }
+        // foreach($inventory as $i) {
+        //     DB::table('products'. $shop->id)->where('id', $i->id)->update(['updated_at' => $i->created_at]);
+        // }
 
         $service = $this->getLimitService($shop->id);
 
         return response()->json([
-            'token' => $token,
+            'token' => JWTAuth::fromUser(Auth::user()),
             'user' => Auth::user(),
             'shop' => $shop,
             'inventory' => $inventory,
