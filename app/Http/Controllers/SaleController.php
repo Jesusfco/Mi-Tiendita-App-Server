@@ -120,15 +120,19 @@ class SaleController extends Controller
         $user = JWTAuth::parseToken()->authenticate(); 
         
         if(isset($request->to))
+
         $sales = DB::table('sales'. $user->shop_id)
                         ->whereBetween('created_at', [$request->from, $request->to . " 23:59:59"])
                         ->orderBy('created_at', 'DESC')
                         ->get();
+
         else {
+
             $sales = DB::table('sales'. $user->shop_id)
                         ->where('created_at', 'LIKE', $request->from . "%")
                         ->orderBy('created_at', 'DESC')
                         ->get();
+                        
         } 
 
         if(!isset($sales[0]))
