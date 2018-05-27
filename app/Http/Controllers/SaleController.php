@@ -11,6 +11,16 @@ use Tymon\JWTAuth\Facades\JWTAuth;
 
 class SaleController extends Controller
 {
+
+    public function organize(){
+        
+        // DB::table('sales6')
+        //             ->where('user_id', 6)
+        //             ->update(['user_id' => 10]);
+
+                    return 'true';
+       
+    }
     public function storeSale(Request $request){
         
         $user = JWTAuth::parseToken()->authenticate();        
@@ -31,7 +41,7 @@ class SaleController extends Controller
         $sale = new sale();
         $sale->setTable('sales'. $user->shop_id);
         $sale->total = $request->total;
-        $sale->user_id = $user->shop_id;
+        $sale->user_id = $user->id;
         $sale->created_at = $request->created_at;
         $sale->save();
         return $sale;
@@ -132,7 +142,7 @@ class SaleController extends Controller
                         ->where('created_at', 'LIKE', $request->from . "%")
                         ->orderBy('created_at', 'DESC')
                         ->get();
-                        
+
         } 
 
         if(!isset($sales[0]))

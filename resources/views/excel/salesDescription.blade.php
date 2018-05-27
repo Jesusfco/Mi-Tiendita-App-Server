@@ -11,7 +11,7 @@
     @foreach($sales as $sale)
         <tr>
             <td>Venta #{{ $sale->id }}</td>
-            <td>{{ $sale->user_id }}</td>
+            <td>{{ $sale->user_name }}</td>
             <td>{{ $sale->total }}</td>
             <td>{{ $sale->created_at }}</td>
         </tr>

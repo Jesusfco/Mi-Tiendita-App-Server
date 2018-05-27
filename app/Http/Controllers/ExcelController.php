@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Product;
+use App\User;
 use Illuminate\Support\Facades\DB;
 
 use Tymon\JWTAuth\Facades\JWTAuth;
@@ -52,15 +53,29 @@ class ExcelController extends Controller
 
         $sales = $this->pushDescription($sales, $user);
 
+        $users = User::where('shop_id', $user->shop_id)->get();
+
 
         $productos = DB::table('products'. $user->shop_id)->orderBy('name', 'ASC')->get();
 
         for($i = 0; $i < count($sales); $i++) {
+
+            foreach($users as $user) {
+
+                if($sales[$i]->user_id == $user->id) {
+                    $sales[$i]->user_name = $user->name;
+                    
+                    break;
+                }
+
+            }
+
             for($x = 0 ; $x < count($sales[$i]->description); $x++){
                 
                 foreach($productos as $pro) {
                     if($pro->id == $sales[$i]->description[$x]->product_id) {
                         $sales[$i]->description[$x]->product_name = $pro->name;
+                        break;
                     }
                 }
             }
