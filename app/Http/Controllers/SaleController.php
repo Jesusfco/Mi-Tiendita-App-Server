@@ -132,7 +132,7 @@ class SaleController extends Controller
         if(isset($request->to))
 
         $sales = DB::table('sales'. $user->shop_id)
-                        ->whereBetween('created_at', [$request->from, $request->to . " 23:59:59"])
+                        ->whereBetween('created_at', [$request->from . " 00:00:00", $request->to . " 23:59:59"])
                         ->orderBy('created_at', 'DESC')
                         ->get();
 

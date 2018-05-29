@@ -7,8 +7,10 @@
         <th>Fecha/Hora</th>
     </tr>
     </thead>
+
     <tbody>
     @foreach($sales as $sale)
+    
         <tr>
             <td>Venta #{{ $sale->id }}</td>
             <td>{{ $sale->user_name }}</td>
